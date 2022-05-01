@@ -20,13 +20,6 @@ export default async (req: Request, res: Response, next: NextFunction) => {
 				message: 'invalid nickname',
 			});
 		}
-		const inputUniv: number = req.body.univ;
-		if (!(inputUniv in UnivType)) {
-			return res.status(462).json({
-				code: 462,
-				message: 'invalid univ type',
-			});
-		}
 		const inputHour: number = req.body.hour;
 		if (inputHour < 0 || inputHour >= 24) {
 			return res.status(463).json({
@@ -124,7 +117,6 @@ export default async (req: Request, res: Response, next: NextFunction) => {
 		let user = new User();
 		let matchingUser = new MatchingUser();
 		user.nickname = inputNickname;
-		user.univ = inputUniv;
 		const today = new Date();
 		moment.tz.setDefault('Asia/Seoul');
 		user.month = moment().month() + 1;
