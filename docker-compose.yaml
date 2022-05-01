@@ -1,0 +1,15 @@
+version: '3.8'  
+services:
+  server1:
+    build: ./NoHonbab-backend
+    ports: 
+      - '8111:80'
+    volumes:
+      - nohonbab-logs:/app/logs
+      - ./NoHonbab-backend:/app
+      - /app/node_modules
+    env_file:
+      - ./envs/backend.env
+    platform: linux/amd64
+volumes:
+  nohonbab-logs:
