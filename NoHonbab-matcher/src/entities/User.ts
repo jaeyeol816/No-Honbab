@@ -150,7 +150,7 @@ export class User extends BaseEntity {
 		{ onDelete: 'SET NULL' },
 	)
 	@JoinColumn({
-		name: 'partner_id',
+		name: 'partner',
 	})
 	partner: User;
 }
