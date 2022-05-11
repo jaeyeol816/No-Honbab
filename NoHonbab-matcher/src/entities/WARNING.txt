@@ -1,0 +1,7 @@
+무조건 항상 NoHonbab-backend의 src/entities 디렉토리의 사본이어야 함.
+여기서 코드 내용 변경 금지. (NoHonbab-backend에서 변경하고 그대로 여기로 복붙할것)
+마찬가지로 NoHonbab-backend에서 변경시, 무조건 여기로 복붙할것!!
+
+복사붙여넣기시 이 WARNING.txt 파일을 날리지 않도록 조심할것.
+
+models디렉토리도 마찬가지.

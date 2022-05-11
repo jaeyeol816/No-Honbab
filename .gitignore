@@ -3,3 +3,7 @@ envs
 node_modules
 dist
 package-lock.json
+.DS_Store
+utility-container-1
+utility-container-2
+.vscode

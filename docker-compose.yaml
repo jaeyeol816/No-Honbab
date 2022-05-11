@@ -5,11 +5,25 @@ services:
     ports: 
       - '8111:80'
     volumes:
-      - nohonbab-logs:/app/logs
+      - nohonbab-backend-logs:/app/logs
       - ./NoHonbab-backend:/app
       - /app/node_modules
     env_file:
       - ./envs/backend.env
     platform: linux/amd64
+  server2:
+    build: ./NoHonbab-matcher
+    ports:
+      - '8112:80'
+    volumes:
+      - nohonbab-match-logs:/app/logs
+      - ./NoHonbab-matcher:/app
+      - /app/node_modules
+    env_file:
+      - ./envs/matcher.env
+    platform: linux/amd64
+    depends_on:
+      - server1
 volumes:
-  nohonbab-logs:
+  nohonbab-backend-logs:
+  nohonbab-match-logs:

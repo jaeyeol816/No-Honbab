@@ -1,6 +1,6 @@
 import express from 'express';
 
-import { matchController } from './controllers';	
+import { matchController } from './controllers/match';	
 
 const router = express.Router();
 

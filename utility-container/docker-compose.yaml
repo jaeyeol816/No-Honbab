@@ -1,9 +1,0 @@
-version: '3.8'
-services:
-  npm: 
-    build: ./
-    platform: linux/amd64
-    stdin_open: true
-    tty: true
-    volumes:
-      - ../NoHonbab-backend/:/app

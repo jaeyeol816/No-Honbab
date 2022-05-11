@@ -9,16 +9,16 @@ import {
 	JoinColumn
 } from 'typeorm';
 
-import { NowMatchingUser } from './NowMatchingUser';
-import { UnivType } from '../models/UnivType';
-import { MinuteType } from '../models/MinuteType';
-import { PlaceType } from '../models/PlaceType';	
+import { User } from './User';
 import { FoodType } from '../models/FoodType';
 import { GenderType } from '../models/GenderType';
 import { Mbti1Type, Mbti2Type, Mbti3Type, Mbti4Type } from '../models/MbtiType';
+import { MinuteType } from '../models/MinuteType';
+import { PlaceType } from '../models/PlaceType';
 
-@Entity('users') 
-export class User extends BaseEntity {
+
+@Entity('now_matching_users')
+export class NowMatchingUser extends BaseEntity {
 	@ObjectIdColumn()
 	id: ObjectID;
 
@@ -132,25 +132,14 @@ export class User extends BaseEntity {
 	@CreateDateColumn()
 	created_at: Date;
 
-	@Column({
-		unique: false,
-		nullable: true,
-	})
-	expires_at: Date;
-
-	@OneToOne(
-		() => NowMatchingUser,
-		matching_user => matching_user.user
-	)
-	now_matching_user: NowMatchingUser;
 
 	@OneToOne(
 		() => User,
-		matched_user => matched_user.partner,
-		{ onDelete: 'SET NULL' },
+		user => user.now_matching_user,
+		{ cascade: true, onDelete: 'CASCADE'}
 	)
 	@JoinColumn({
-		name: 'partner_id',
+		name: 'user_id',
 	})
-	partner: User;
+	user: User;
 }
