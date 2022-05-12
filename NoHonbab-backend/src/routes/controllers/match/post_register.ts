@@ -131,6 +131,7 @@ export default async (req: Request, res: Response, next: NextFunction) => {
 		let user = new User();
 		let nowMatchingUser = new NowMatchingUser();
 		user.nickname = inputNickname;
+		nowMatchingUser.nickname = inputNickname;
 		const today = new Date();
 		moment.tz.setDefault('Asia/Seoul');
 		user.month = moment().month() + 1;

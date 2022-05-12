@@ -1,9 +1,10 @@
 import cron from 'node-cron';
 import moment from 'moment-timezone';
-import { ObjectID } from 'typeorm';
-import { In } from 'typeorm';
+import { ObjectID, getMongoManager, getMongoRepository } from 'typeorm';
+
 
 import { User, NowMatchingUser } from '../entities';
+import { myDataSource } from '../mongo';
 import { getAgeScore } from './get_age_score';
 import { getMbtiScore } from './get_mbti_score';
 
@@ -24,22 +25,20 @@ export const task = cron.schedule('*/10 * * * * *', async () => {
 	//매칭되었으면, 해당 사람을 User에서 업데이트하고, 상대방도 User에서 업데이트. (User에서 partenr 속성값 추가, is_matched속성도 변경)
 	//그리고 NowMatchingUser에서 두 사용자 삭제.
 	try {
-		let temp = await NowMatchingUser.find();
-		let shouldBeTried = Array<string>();
-		for (let i = 0; i < temp.length; i++) {
-			shouldBeTried.push(temp[i].nickname);
-		}
-		console.log(shouldBeTried);
+		moment.tz.setDefault('Asia/Seoul');
+		let alreadyDone = Array<ObjectID>();
 		while (true) {
-			const targetMatchingUser = await NowMatchingUser.findOne({
+			console.log(alreadyDone);
+			const nmu = getMongoRepository(NowMatchingUser);
+			const targetMatchingUser = await nmu.findOneBy({
 				where: {
-					nickname: In(shouldBeTried),
-				}
+					id: { $not: { $in: [...alreadyDone] } }
+				},
 			});
+			console.log(targetMatchingUser);		//test code
 			if (targetMatchingUser) {
 				console.log('in');		//test code
-				let idx = shouldBeTried.indexOf(targetMatchingUser.nickname);
-				shouldBeTried.splice(idx);
+				alreadyDone.push(targetMatchingUser.id);
 				const candidateMatchingUsers = await NowMatchingUser.find({
 					where: {
 						month: moment().month() + 1,
@@ -48,10 +47,10 @@ export const task = cron.schedule('*/10 * * * * *', async () => {
 						minute: targetMatchingUser.minute,
 					}
 				});
-				
+				console.log(candidateMatchingUsers);	//test code
 				let tempArr = Array<Element>();
 				for (let u of candidateMatchingUsers) {
-					if (u.id == targetMatchingUser.id) 
+					if (u.id === targetMatchingUser.id) 
 						continue;
 					let ageScore = getAgeScore(targetMatchingUser.age, u.age);
 					let mbtiScore = getMbtiScore(targetMatchingUser.mbti_1, targetMatchingUser.mbti_2, targetMatchingUser.mbti_3, targetMatchingUser.mbti_4,
@@ -76,6 +75,7 @@ export const task = cron.schedule('*/10 * * * * *', async () => {
 							}
 						});
 						if (!targetUser || !partnerUser) {
+							console.log('error1');
 							//에러 처리
 						}
 						else {
@@ -84,8 +84,8 @@ export const task = cron.schedule('*/10 * * * * *', async () => {
 							targetUser.is_matched = true;
 							partnerUser.is_matched = true;
 							console.log('matching completed: ', targetUser.nickname, ' and ', partnerUser.nickname);
-							targetUser.save();
-							partnerUser.save();
+							await targetUser.save();
+							await partnerUser.save();
 							await NowMatchingUser.delete(targetMatchingUser.id);
 							await NowMatchingUser.delete(tempArr[0].person.id);	
 						}
