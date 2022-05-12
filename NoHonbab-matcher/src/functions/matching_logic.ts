@@ -1,7 +1,7 @@
 import cron from 'node-cron';
 import moment from 'moment-timezone';
 import { ObjectID } from 'typeorm';
-import { Not, In } from 'typeorm';
+import { In } from 'typeorm';
 
 import { User, NowMatchingUser } from '../entities';
 import { getAgeScore } from './get_age_score';
@@ -14,7 +14,7 @@ type Element = {
 }
 
 
-export const task = cron.schedule('*/30 * * * *', async () => {
+export const task = cron.schedule('*/10 * * * * *', async () => {
 	console.log('30초마다 시행 (임시)');
 	//NowMatchingUser에 있는 사용자 각각 매칭 로직 실시 (모든 사람에 대해 반복))
 	//일단 앞 사람부터 한명 가져온다.
@@ -24,15 +24,22 @@ export const task = cron.schedule('*/30 * * * *', async () => {
 	//매칭되었으면, 해당 사람을 User에서 업데이트하고, 상대방도 User에서 업데이트. (User에서 partenr 속성값 추가, is_matched속성도 변경)
 	//그리고 NowMatchingUser에서 두 사용자 삭제.
 	try {
-		let alreadyTried = Array<ObjectID>();
+		let temp = await NowMatchingUser.find();
+		let shouldBeTried = Array<string>();
+		for (let i = 0; i < temp.length; i++) {
+			shouldBeTried.push(temp[i].nickname);
+		}
+		console.log(shouldBeTried);
 		while (true) {
 			const targetMatchingUser = await NowMatchingUser.findOne({
 				where: {
-					id: Not(In(alreadyTried)),
+					nickname: In(shouldBeTried),
 				}
 			});
 			if (targetMatchingUser) {
-				alreadyTried.push(targetMatchingUser.id);
+				console.log('in');		//test code
+				let idx = shouldBeTried.indexOf(targetMatchingUser.nickname);
+				shouldBeTried.splice(idx);
 				const candidateMatchingUsers = await NowMatchingUser.find({
 					where: {
 						month: moment().month() + 1,
@@ -81,7 +88,6 @@ export const task = cron.schedule('*/30 * * * *', async () => {
 							partnerUser.save();
 							await NowMatchingUser.delete(targetMatchingUser.id);
 							await NowMatchingUser.delete(tempArr[0].person.id);	
-						
 						}
 					}
 					else {	
@@ -91,6 +97,7 @@ export const task = cron.schedule('*/30 * * * *', async () => {
 				}
 			}
 			else {
+				console.log('out');
 				break;
 			}
 		}
