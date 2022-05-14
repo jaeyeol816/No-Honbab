@@ -1,10 +1,10 @@
-// import express from 'express';
+import express from 'express';
 
-// import { controlController } from './controllers/control';
+import { controlController } from './controllers/control';
 
-// const router = express.Router();
+const router = express.Router();
 
-// router.post('/start', controlController.post_start);
-// router.post('/stop', controlController.post_stop);
+router.post('/start', controlController.post_start);
+router.post('/stop', controlController.post_stop);
 
-// export default router;
+export default router;
