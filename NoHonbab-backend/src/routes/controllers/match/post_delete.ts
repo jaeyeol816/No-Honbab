@@ -1,6 +1,6 @@
 import { Request, Response, NextFunction } from "express";	
 
-import { User } from "../../../entities";
+import { NowMatchingUser, User } from "../../../entities";
 
 export default async (req: Request, res: Response, next: NextFunction) => {
 	try {
@@ -15,9 +15,40 @@ export default async (req: Request, res: Response, next: NextFunction) => {
 				message: 'non registered nickname'
 			});
 		}
-		await User.delete({
-			id: user.id
+		const partner = await User.findOne({
+			where: {
+				partner: {
+					id: user.id
+				}
+			}
 		});
+		if (partner) {
+			let nowMatchingUser = new NowMatchingUser();
+			nowMatchingUser.user = partner;
+			nowMatchingUser.nickname = partner.nickname;
+			nowMatchingUser.month = partner.month;
+			nowMatchingUser.date = partner.date;
+			nowMatchingUser.hour = partner.hour;
+			nowMatchingUser.minute = partner.minute;
+			nowMatchingUser.place = partner.place;
+			nowMatchingUser.food_type = partner.food_type;
+			nowMatchingUser.gender = partner.gender;
+			nowMatchingUser.age = partner.age;
+			nowMatchingUser.mbti_1 = partner.mbti_1;
+			nowMatchingUser.mbti_2 = partner.mbti_2;
+			nowMatchingUser.mbti_3 = partner.mbti_3;
+			nowMatchingUser.mbti_4 = partner.mbti_4;
+			nowMatchingUser.kakao_id = partner.kakao_id;
+			await User.delete({
+				id: user.id
+			});
+			nowMatchingUser.save();
+		}
+		else {
+			await User.delete({
+				id: user.id
+			});
+		}
 		return res.status(203).json({
 			code: 203,
 			message: 'deleting completed'
