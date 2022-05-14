@@ -3,7 +3,7 @@ import morgan from 'morgan';
 import { createConnection } from 'typeorm';
 
 import { User, NowMatchingUser }	from './entities';
-import controlRouter from './routes/control';
+// import controlRouter from './routes/control';
 
 const app = express();
 
@@ -31,7 +31,7 @@ const main = async () => {
 
 	app.use(morgan(process.env.NODE_ENV || 'dev'));
 
-	app.use('/control', controlRouter);
+	// app.use('/control', controlRouter);
 
 	app.get('/', (req, res) => {
 		res.json({ signal: 'success~!' });
