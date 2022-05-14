@@ -3,7 +3,6 @@ import morgan from 'morgan';
 import { createConnection } from 'typeorm';
 
 import { User, NowMatchingUser }	from './entities';
-import { myDataSource } from './mongo';
 import controlRouter from './routes/control';
 
 const app = express();
@@ -12,14 +11,17 @@ app.set('port', process.env.PORT || 80);
 
 const main = async () => {
 	try {
-		const x = myDataSource;
-		const connection = await createConnection({
-			type: 'mongodb',
-			url: `mongodb+srv://${process.env.DB_USER_NAME}:${process.env.DB_PASSWORD}@${process.env.DB_URL}/${process.env.DB_DATABASE_NAME}?retryWrites=true&w=majority`,
-			ssl: true,
-			authSource: 'admin',
-			entities: [ User, NowMatchingUser ],
-		});
+		await createConnection({
+      type: 'mysql',
+      host: process.env.DB_URL,
+      port: 3306,
+      username: process.env.DB_USER_NAME,
+      password: process.env.DB_PASSWORD,
+      database: process.env.DB_DATABASE_NAME,
+      entities: [User, NowMatchingUser],
+      synchronize: true,
+      charset: 'UTF8_GENERAL_CI',
+    });
 		console.log('데이터베이스 연결 성공 from matcher서버');
 	}
 	catch (err) {

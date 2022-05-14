@@ -16,8 +16,8 @@
     "@types/nodemon": "^1.19.1",
     "express": "^4.18.1",
     "moment": "^2.29.3",
-    "mongodb": "^3.7.3",
     "morgan": "^1.10.0",
+    "mysql2": "^2.3.3",
     "node-cron": "^3.0.0",
     "nodemon": "^2.0.16",
     "typeorm": "^0.3.6"

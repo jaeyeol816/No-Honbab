@@ -2,8 +2,7 @@ import {
 	Entity,
 	BaseEntity,
 	Column,
-	ObjectIdColumn,
-	ObjectID,
+	PrimaryGeneratedColumn,
 	CreateDateColumn,
 	OneToOne,
 	JoinColumn
@@ -19,8 +18,8 @@ import { Mbti1Type, Mbti2Type, Mbti3Type, Mbti4Type } from '../models/MbtiType';
 
 @Entity('users') 
 export class User extends BaseEntity {
-	@ObjectIdColumn()
-	id: ObjectID;
+	@PrimaryGeneratedColumn()
+	id: number;
 
 	@Column({
 		unique: true,

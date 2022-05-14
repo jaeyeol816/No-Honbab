@@ -2,8 +2,7 @@ import {
 	Entity,
 	BaseEntity,
 	Column,
-	ObjectIdColumn,
-	ObjectID,
+	PrimaryGeneratedColumn,
 	CreateDateColumn,
 	OneToOne,
 	JoinColumn
@@ -19,8 +18,8 @@ import { PlaceType } from '../models/PlaceType';
 
 @Entity('now_matching_users')
 export class NowMatchingUser extends BaseEntity {
-	@ObjectIdColumn()
-	id: ObjectID;
+	@PrimaryGeneratedColumn()
+	id: number;
 
 	@Column({
 		unique: true,
