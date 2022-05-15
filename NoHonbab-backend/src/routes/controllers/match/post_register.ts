@@ -13,55 +13,61 @@ export default async (req: Request, res: Response, next: NextFunction) => {
 	try {
 		//들어온 데이터 형식이 잘못된게 있는지 확인
 		const inputNickname: string = req.body.nickname;
-		if (inputNickname.length <= 1 || inputNickname.length >= 10) {
+		if (!inputNickname || inputNickname.length <= 1 || inputNickname.length >= 10) {
 			return res.status(460).json({
 				code: 460,
 				message: 'invalid nickname',
 			});
 		}
 		const inputHour: number = req.body.hour;
-		if (inputHour < 0 || inputHour >= 24) {
+		if (!inputHour || inputHour < 0 || inputHour >= 24) {
 			return res.status(461).json({
 				code: 461,
 				message: 'invalid hour',
 			});
 		}
 		const inputMinute: number = req.body.minute;
-		if (!(inputMinute in MinuteType)) {
+		if (!inputMinute ||  !(inputMinute in MinuteType)) {
 			return res.status(462).json({
 				code: 462,
 				message: 'invalid minute type'
 			});
 		}
 		const inputAge: number = req.body.age;
-		if (inputAge <= 0 || inputAge >= 100) {
+		if (!inputAge || inputAge <= 0 || inputAge >= 100) {
 			return res.status(466).json({
 				code: 466,
 				message: 'invalid age value',
 			});
 		}
 		const inputFood: number = req.body.food_type;
-		if (!(inputFood in FoodType)) {
+		if (!inputFood || !(inputFood in FoodType)) {
 			return res.status(464).json({
 				code: 464,
 				message: 'invalid food type'
 			});
 		}
 		const inputPlace: number = req.body.place;
-		if (!(inputPlace in PlaceType)) {
+		if (!inputPlace || !(inputPlace in PlaceType)) {
 			return res.status(463).json({
 				code: 463,
 				message: 'invalid place type',
 			});
 		}
 		const inputGender: number = req.body.gender;
-		if (!(inputGender in GenderType)) {
+		if (!inputGender || !(inputGender in GenderType)) {
 			return res.status(465).json({
 				code: 465,
 				message: 'invalid gender type',
 			});
 		}
 		const inputMbti: string = req.body.mbti;
+		if (!inputMbti) {
+			return res.status(467).json({
+				code: 467,
+				message: 'invalid mbti type',
+			});
+		}
 		let resultArr: number[] = [];
 		let errorFlag: boolean = false;
 		if (inputMbti[0] === 'i' || inputMbti[0] === 'I') {
@@ -107,7 +113,7 @@ export default async (req: Request, res: Response, next: NextFunction) => {
 			});
 		}
 		const inputKakaoId: string = req.body.kakao_id;
-		if (inputKakaoId.length <= 1 && inputKakaoId.length > 20) {
+		if (!inputKakaoId || inputKakaoId.length <= 1 && inputKakaoId.length > 20) {
 			return res.status(468).json({
 				code: 468,
 				message: 'invalid kakao id',
