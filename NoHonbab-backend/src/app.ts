@@ -1,10 +1,12 @@
 import express , { Request, Response } from 'express';
-import morgan from 'morgan';
+import morgan, { StreamOptions } from 'morgan';
 import { createConnection } from 'typeorm';
 import cors from 'cors';
 
 import matchRouter from './routes/match';
 import { User, NowMatchingUser }	from './entities';
+import { stream } from './logger';
+import { getLogger } from './logger';
 
 const app = express();
 
@@ -23,15 +25,15 @@ const main = async () => {
       synchronize: true,
       charset: 'UTF8_GENERAL_CI',
     });
-		console.log('데이터베이스 연결 성공');
+		getLogger('server').info('데이터베이스 연결 성공');
 	}
 	catch (err) {
-		console.log('데이터베이스 연결 실패');
-		console.error(err);
+		getLogger('server').info('데이터베이스 연결 실패');
+		getLogger('server').error(err);
 	}
 
 
-	app.use(morgan(process.env.NODE_ENV || 'dev'));
+	app.use(morgan(process.env.NODE_ENV === 'production' ? 'combined': 'dev', { stream}));
 
 	app.use(express.json());
 	app.use(express.urlencoded({ extended: false }));
@@ -46,7 +48,7 @@ const main = async () => {
 	});
 
 	app.listen(app.get('port'), () => {
-		console.log(app.get('port'), '번 포트에서 대기중 (컨테이너의 포트번호)');
+		getLogger('server').info(app.get('port'), '번 포트에서 대기중 (컨테이너의 포트번호)');
 	});
 }
 

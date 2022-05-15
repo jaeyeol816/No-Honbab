@@ -4,6 +4,7 @@ import moment from 'moment-timezone';
 import { User, NowMatchingUser } from '../entities';
 import { getAgeScore } from './get_age_score';
 import { getMbtiScore } from './get_mbti_score';
+import { getLogger } from '../logger';
 
 
 type Element = {
@@ -12,8 +13,7 @@ type Element = {
 }
 
 
-export const task = cron.schedule('*/10 * * * * *', async () => {
-	console.log('30초마다 시행 (임시)');
+export const task = cron.schedule('*/15 * * * * *', async () => {
 	//NowMatchingUser에 있는 사용자 각각 매칭 로직 실시 (모든 사람에 대해 반복))
 	//일단 앞 사람부터 한명 가져온다.
 	//그 사람이랑 시간,분,장소 같은 사람 모두 가져온다.
@@ -26,14 +26,11 @@ export const task = cron.schedule('*/10 * * * * *', async () => {
 		let alreadyDone = Array<number>();
 		alreadyDone.push(9999999999);
 		while (true) {
-			console.log(alreadyDone);		//test code
 			const targetMatchingUser = await NowMatchingUser
 				.createQueryBuilder()
 				.where('NowMatchingUser.id NOT IN (:...x)', {x: alreadyDone})
 				.getOne();
-			console.log(targetMatchingUser);		//test code
 			if (targetMatchingUser) {
-				console.log('in');		//test code
 				alreadyDone.push(targetMatchingUser.id);
 				const matchingUsers = await NowMatchingUser.find({
 					// where: {
@@ -54,7 +51,6 @@ export const task = cron.schedule('*/10 * * * * *', async () => {
 					else
 						return false;
 				});
-				console.log(candidateMatchingUsers);	//test code
 				let tempArr = Array<Element>();
 				for (let u of candidateMatchingUsers) {
 					if (u.id === targetMatchingUser.id) 
@@ -82,7 +78,6 @@ export const task = cron.schedule('*/10 * * * * *', async () => {
 							}
 						});
 						if (!targetUser || !partnerUser) {
-							console.log('error1');
 							//에러 처리
 						}
 						else {
@@ -90,7 +85,7 @@ export const task = cron.schedule('*/10 * * * * *', async () => {
 							partnerUser.partner = targetUser;
 							targetUser.is_matched = true;
 							partnerUser.is_matched = true;
-							console.log('matching completed: ', targetUser.nickname, ' and ', partnerUser.nickname);
+							getLogger('server').info('matching completed: ', targetUser.nickname, ' and ', partnerUser.nickname);
 							await targetUser.save();
 							await partnerUser.save();
 							await NowMatchingUser.delete(targetMatchingUser.id);
@@ -104,14 +99,13 @@ export const task = cron.schedule('*/10 * * * * *', async () => {
 				}
 			}
 			else {
-				console.log('out');		//test code
 				break;
 			}
 		}
 
 	}
 	catch (err) {
-		console.error(err);
+		getLogger('server').error(err);
 	}
 }, {
 	scheduled: false,

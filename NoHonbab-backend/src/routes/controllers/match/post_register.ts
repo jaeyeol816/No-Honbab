@@ -8,6 +8,8 @@ import { PlaceType } from "../../../models/PlaceType";
 import { FoodType } from "../../../models/FoodType";
 import { GenderType } from "../../../models/GenderType";
 import { Mbti1Type, Mbti2Type, Mbti3Type, Mbti4Type } from "../../../models/MbtiType";
+import { getLogger } from "../../../logger";
+
 
 export default async (req: Request, res: Response, next: NextFunction) => {
 	try {
@@ -20,42 +22,42 @@ export default async (req: Request, res: Response, next: NextFunction) => {
 			});
 		}
 		const inputHour: number = req.body.hour;
-		if (!inputHour || inputHour < 0 || inputHour >= 24) {
+		if ((!inputHour && inputHour !== 0) || inputHour < 0 || inputHour >= 24) {
 			return res.status(461).json({
 				code: 461,
 				message: 'invalid hour',
 			});
 		}
 		const inputMinute: number = req.body.minute;
-		if (!inputMinute ||  !(inputMinute in MinuteType)) {
+		if ((!inputMinute && inputMinute !== 0) ||  !(inputMinute in MinuteType)) {
 			return res.status(462).json({
 				code: 462,
 				message: 'invalid minute type'
 			});
 		}
 		const inputAge: number = req.body.age;
-		if (!inputAge || inputAge <= 0 || inputAge >= 100) {
+		if ((!inputAge && inputAge !== 0)|| inputAge <= 0 || inputAge >= 100) {
 			return res.status(466).json({
 				code: 466,
 				message: 'invalid age value',
 			});
 		}
 		const inputFood: number = req.body.food_type;
-		if (!inputFood || !(inputFood in FoodType)) {
+		if ((!inputFood && inputFood !== 0) || !(inputFood in FoodType)) {
 			return res.status(464).json({
 				code: 464,
 				message: 'invalid food type'
 			});
 		}
 		const inputPlace: number = req.body.place;
-		if (!inputPlace || !(inputPlace in PlaceType)) {
+		if ((!inputPlace && inputPlace !== 0)|| !(inputPlace in PlaceType)) {
 			return res.status(463).json({
 				code: 463,
 				message: 'invalid place type',
 			});
 		}
 		const inputGender: number = req.body.gender;
-		if (!inputGender || !(inputGender in GenderType)) {
+		if ((!inputGender && inputGender !== 0)|| !(inputGender in GenderType)) {
 			return res.status(465).json({
 				code: 465,
 				message: 'invalid gender type',
@@ -178,7 +180,7 @@ export default async (req: Request, res: Response, next: NextFunction) => {
 		});
 	}
 	catch (err) {
-		console.error(err);
+		getLogger('server').error(err);
 		return res.status(408).json({
 			code: 408,
 			message: 'server error',

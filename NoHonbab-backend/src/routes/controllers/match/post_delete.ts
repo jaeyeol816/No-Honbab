@@ -1,9 +1,16 @@
 import { Request, Response, NextFunction } from "express";	
 
 import { NowMatchingUser, User } from "../../../entities";
+import { getLogger } from "../../../logger";
 
 export default async (req: Request, res: Response, next: NextFunction) => {
 	try {
+		if (!req.body.nickname) {
+			return res.status(471).json({
+				code: 470,
+				message: 'no nickname',
+			});
+		}
 		const user = await User.findOne({
 			where: {
 				nickname: req.body.nickname
@@ -55,7 +62,7 @@ export default async (req: Request, res: Response, next: NextFunction) => {
 		});
 	}
 	catch (err) {
-		console.error(err);
+		getLogger('server').error(err);
 		return res.status(408).json({
 			code: 408,
 			message: 'server error',
