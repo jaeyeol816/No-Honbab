@@ -4,13 +4,9 @@ import moment from 'moment-timezone';
 import { User, NowMatchingUser } from '../entities';
 import { getAgeScore } from './get_age_score';
 import { getMbtiScore } from './get_mbti_score';
+import { Element } from '../models/TypeElement';
 // import { getLogger } from '../logger';
 
-
-type Element = {
-	person: NowMatchingUser,
-	score: number,
-}
 
 
 export const task = cron.schedule('*/15 * * * * *', async () => {
@@ -58,13 +54,23 @@ export const task = cron.schedule('*/15 * * * * *', async () => {
 					let ageScore = getAgeScore(targetMatchingUser.age, u.age);
 					let mbtiScore = getMbtiScore(targetMatchingUser.mbti_1, targetMatchingUser.mbti_2, targetMatchingUser.mbti_3, targetMatchingUser.mbti_4,
 						u.mbti_1, u.mbti_2, u.mbti_3, u.mbti_4);
-					tempArr.push({ person: u, score: ageScore+mbtiScore });
+					let genderScore: number;
+					if (targetMatchingUser.prefer_gender === u.gender && u.prefer_gender === targetMatchingUser.gender)
+						genderScore = 5;
+					else
+						genderScore = 0;
+					let foodScore: number;
+					if (targetMatchingUser.food_type === u.food_type)
+						foodScore = 5;
+					else
+						foodScore = 0;
+					tempArr.push({ person: u, score: ageScore+mbtiScore+genderScore+foodScore });
 				}
 				if (tempArr.length >= 1) {		//원소가 있을 때,
 					tempArr.sort((e1: Element, e2: Element) => {		//내림차순 정렬
 						return e2.score - e1.score;
 					});
-					if (tempArr[0].score >= 12) {		//가장 큰 점수 가진 사람과의 점수가 12점 이상이면 매칭 된것!!
+					if (tempArr[0].score >= 18) {		//가장 큰 점수 가진 사람과의 점수가 12점 이상이면 매칭 된것!!
 						let targetUser = await User.findOne({
 							relations: ['now_matching_user'],
 							where: {

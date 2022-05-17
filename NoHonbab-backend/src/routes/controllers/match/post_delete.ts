@@ -1,7 +1,7 @@
 import { Request, Response, NextFunction } from "express";	
 
 import { NowMatchingUser, User } from "../../../entities";
-import { getLogger } from "../../../logger";
+// import { getLogger } from "../../../logger";
 
 export default async (req: Request, res: Response, next: NextFunction) => {
 	try {
@@ -62,7 +62,8 @@ export default async (req: Request, res: Response, next: NextFunction) => {
 		});
 	}
 	catch (err) {
-		getLogger('server').error(err);
+		// getLogger('server').error(err);
+		console.error(err);
 		return res.status(408).json({
 			code: 408,
 			message: 'server error',

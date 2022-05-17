@@ -80,6 +80,14 @@ export class User extends BaseEntity {
 
 	@Column({
 		unique: false,
+		nullable: false,
+		type: 'enum',
+		enum: GenderType,
+	})
+	prefer_gender: number;
+
+	@Column({
+		unique: false,
 		nullable: true,
 	})
 	age: number;

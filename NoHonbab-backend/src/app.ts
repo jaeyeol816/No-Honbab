@@ -5,8 +5,8 @@ import cors from 'cors';
 
 import matchRouter from './routes/match';
 import { User, NowMatchingUser }	from './entities';
-import { stream } from './logger';
-import { getLogger } from './logger';
+// import { stream } from './logger';
+// import { getLogger } from './logger';
 
 const app = express();
 
@@ -25,15 +25,19 @@ const main = async () => {
       synchronize: true,
       charset: 'UTF8_GENERAL_CI',
     });
-		getLogger('server').info('데이터베이스 연결 성공');
+		// getLogger('server').info('데이터베이스 연결 성공');
+		console.log('데이터베이스 연결 성공(backend서버)');
 	}
 	catch (err) {
-		getLogger('server').info('데이터베이스 연결 실패');
-		getLogger('server').error(err);
+		// getLogger('server').info('데이터베이스 연결 실패');
+		console.log('데이터베이스 연결 실패(backend서버)');
+		// getLogger('server').error(err);
+		console.error(err);
 	}
 
 
-	app.use(morgan(process.env.NODE_ENV === 'production' ? 'combined': 'dev', { stream}));
+	// app.use(morgan(process.env.NODE_ENV === 'production' ? 'combined': 'dev', { stream}));
+	app.use(morgan(process.env.NODE_ENV || 'dev'));
 
 	app.use(express.json());
 	app.use(express.urlencoded({ extended: false }));
@@ -48,7 +52,8 @@ const main = async () => {
 	});
 
 	app.listen(app.get('port'), () => {
-		getLogger('server').info(app.get('port'), '번 포트에서 대기중 (컨테이너의 포트번호)');
+		// getLogger('server').info(app.get('port'), '번 포트에서 대기중 (컨테이너의 포트번호)');
+		console.log(app.get('port'), '번 포트에서 대기중(컨테이너의 포트번호)');
 	});
 }
 

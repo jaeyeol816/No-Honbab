@@ -8,7 +8,7 @@ import { PlaceType } from "../../../models/PlaceType";
 import { FoodType } from "../../../models/FoodType";
 import { GenderType } from "../../../models/GenderType";
 import { Mbti1Type, Mbti2Type, Mbti3Type, Mbti4Type } from "../../../models/MbtiType";
-import { getLogger } from "../../../logger";
+// import { getLogger } from "../../../logger";
 
 
 export default async (req: Request, res: Response, next: NextFunction) => {
@@ -61,6 +61,13 @@ export default async (req: Request, res: Response, next: NextFunction) => {
 			return res.status(465).json({
 				code: 465,
 				message: 'invalid gender type',
+			});
+		}
+		const inputPreferGender: number = req.body.prefer_gender;
+		if ((!inputPreferGender && inputPreferGender !== 0) || !(inputPreferGender in GenderType)) {
+			return res.status(469).json({
+				code: 465,
+				message: 'invalid prefer gender type',
 			});
 		}
 		const inputMbti: string = req.body.mbti;
@@ -156,6 +163,8 @@ export default async (req: Request, res: Response, next: NextFunction) => {
 		nowMatchingUser.place = inputPlace;
 		user.gender = inputGender;
 		nowMatchingUser.gender = inputGender;
+		user.prefer_gender = inputPreferGender;
+		nowMatchingUser.prefer_gender = inputPreferGender;
 		user.age = inputAge;
 		nowMatchingUser.age = inputAge;
 		user.mbti_1 = resultArr[0];
@@ -180,7 +189,8 @@ export default async (req: Request, res: Response, next: NextFunction) => {
 		});
 	}
 	catch (err) {
-		getLogger('server').error(err);
+		// getLogger('server').error(err);
+		console.error(err);
 		return res.status(408).json({
 			code: 408,
 			message: 'server error',
