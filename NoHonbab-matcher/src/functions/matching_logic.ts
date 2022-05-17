@@ -4,7 +4,7 @@ import moment from 'moment-timezone';
 import { User, NowMatchingUser } from '../entities';
 import { getAgeScore } from './get_age_score';
 import { getMbtiScore } from './get_mbti_score';
-import { getLogger } from '../logger';
+// import { getLogger } from '../logger';
 
 
 type Element = {
@@ -85,7 +85,8 @@ export const task = cron.schedule('*/15 * * * * *', async () => {
 							partnerUser.partner = targetUser;
 							targetUser.is_matched = true;
 							partnerUser.is_matched = true;
-							getLogger('server').info('matching completed: ', targetUser.nickname, ' and ', partnerUser.nickname);
+							// getLogger('server').info('matching completed: ', targetUser.nickname, ' and ', partnerUser.nickname);
+							console.log('matching completed: ', targetUser.nickname, ' and ', partnerUser.nickname);
 							await targetUser.save();
 							await partnerUser.save();
 							await NowMatchingUser.delete(targetMatchingUser.id);
@@ -105,7 +106,8 @@ export const task = cron.schedule('*/15 * * * * *', async () => {
 
 	}
 	catch (err) {
-		getLogger('server').error(err);
+		// getLogger('server').error(err);
+		console.error('err at matching logic');
 	}
 }, {
 	scheduled: false,

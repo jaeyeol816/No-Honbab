@@ -14,7 +14,7 @@ services:
   server2:
     build: ./NoHonbab-matcher
     ports:
-      - '8112:80'
+      - '8112:8112'
     volumes:
       - nohonbab-match-logs:/app/logs
       - ./NoHonbab-matcher:/app

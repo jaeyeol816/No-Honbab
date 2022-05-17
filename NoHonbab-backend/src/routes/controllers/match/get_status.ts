@@ -1,11 +1,13 @@
 import { Request, Response, NextFunction } from "express";	
+import querystring from 'querystring';
 
 import { User } from "../../../entities";
 import { getLogger } from "../../../logger";
 
 export default async (req: Request, res: Response, next: NextFunction) => {
+	const inputNickname = req.query.nickname as string;
 	try {
-		if (!req.body.nickname) {
+		if (!inputNickname) {
 			return res.status(471).json({
 				code: 470,
 				message: 'no nickname',
@@ -13,7 +15,7 @@ export default async (req: Request, res: Response, next: NextFunction) => {
 		}
 		const user = await User.findOne({
 			where: {
-				nickname: req.body.nickname,
+				nickname: inputNickname,
 			}
 		});
 		if (!user) {
