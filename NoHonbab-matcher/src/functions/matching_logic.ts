@@ -4,7 +4,8 @@ import moment from 'moment-timezone';
 import { User, NowMatchingUser } from '../entities';
 import { getAgeScore } from './get_age_score';
 import { getMbtiScore } from './get_mbti_score';
-import { Element } from '../models/TypeElement';
+import { Element } from '../models/TypeElement'
+import { MaxHeap } from '../models/MaxHeapClass';
 // import { getLogger } from '../logger';
 
 
@@ -47,7 +48,8 @@ export const task = cron.schedule('*/15 * * * * *', async () => {
 					else
 						return false;
 				});
-				let tempArr = Array<Element>();
+				// let tempArr = Array<Element>();
+				let heap = new MaxHeap();
 				for (let u of candidateMatchingUsers) {
 					if (u.id === targetMatchingUser.id) 
 						continue;
@@ -64,42 +66,42 @@ export const task = cron.schedule('*/15 * * * * *', async () => {
 						foodScore = 5;
 					else
 						foodScore = 0;
-					tempArr.push({ person: u, score: ageScore+mbtiScore+genderScore+foodScore });
+					// tempArr.push({ person: u, score: ageScore+mbtiScore+genderScore+foodScore });
+					let score = ageScore+mbtiScore+genderScore+foodScore;
+					if (score > 18)	
+						heap.add({ person: u, score: score });
 				}
-				if (tempArr.length >= 1) {		//원소가 있을 때,
-					tempArr.sort((e1: Element, e2: Element) => {		//내림차순 정렬
-						return e2.score - e1.score;
+				// if (tempArr.length >= 1) {
+				if (heap.length >= 1) {		//원소가 있을 때,
+					// tempArr.sort((e1: Element, e2: Element) => {		//내림차순 정렬
+					// 	return e2.score - e1.score;
+					// });
+					let targetUser = await User.findOne({
+						relations: ['now_matching_user'],
+						where: {
+							now_matching_user: {id: targetMatchingUser.id},
+						}
 					});
-					if (tempArr[0].score >= 18) {		//가장 큰 점수 가진 사람과의 점수가 12점 이상이면 매칭 된것!!
-						let targetUser = await User.findOne({
-							relations: ['now_matching_user'],
-							where: {
-								now_matching_user: {id: targetMatchingUser.id},
-							}
-						});
-						let partnerUser = await User.findOne({
-							relations: ['now_matching_user'],
-							where: {
-								now_matching_user: {id: tempArr[0].person.id},
-							}
-						});
-						if (!targetUser || !partnerUser) {
-							//에러 처리
+					let partnerUser = await User.findOne({
+						relations: ['now_matching_user'],
+						where: {
+							now_matching_user: {id: heap.arr[0].person.id},
 						}
-						else {
-							targetUser.partner = partnerUser;
-							partnerUser.partner = targetUser;
-							targetUser.is_matched = true;
-							partnerUser.is_matched = true;
-							// getLogger('server').info('matching completed: ', targetUser.nickname, ' and ', partnerUser.nickname);
-							console.log('matching completed: ', targetUser.nickname, ' and ', partnerUser.nickname);
-							await targetUser.save();
-							await partnerUser.save();
-							await NowMatchingUser.delete(targetMatchingUser.id);
-							await NowMatchingUser.delete(tempArr[0].person.id);	
-						}
+					});
+					if (!targetUser || !partnerUser) {
+						//에러 처리
 					}
-					else {	
+					else {
+						targetUser.partner = partnerUser;
+						partnerUser.partner = targetUser;
+						targetUser.is_matched = true;
+						partnerUser.is_matched = true;
+						// getLogger('server').info('matching completed: ', targetUser.nickname, ' and ', partnerUser.nickname);
+						console.log('matching completed: ', targetUser.nickname, ' and ', partnerUser.nickname);
+						await targetUser.save();
+						await partnerUser.save();
+						await NowMatchingUser.delete(targetMatchingUser.id);
+						await NowMatchingUser.delete(heap.arr[0].person.id);	
 					}
 				}
 				else {		//원소가 없을 때

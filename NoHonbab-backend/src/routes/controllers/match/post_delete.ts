@@ -22,7 +22,7 @@ export default async (req: Request, res: Response, next: NextFunction) => {
 				message: 'non registered nickname'
 			});
 		}
-		const partner = await User.findOne({
+		let partner = await User.findOne({
 			where: {
 				partner: {
 					id: user.id
@@ -40,16 +40,19 @@ export default async (req: Request, res: Response, next: NextFunction) => {
 			nowMatchingUser.place = partner.place;
 			nowMatchingUser.food_type = partner.food_type;
 			nowMatchingUser.gender = partner.gender;
+			nowMatchingUser.prefer_gender = partner.prefer_gender;
 			nowMatchingUser.age = partner.age;
 			nowMatchingUser.mbti_1 = partner.mbti_1;
 			nowMatchingUser.mbti_2 = partner.mbti_2;
 			nowMatchingUser.mbti_3 = partner.mbti_3;
 			nowMatchingUser.mbti_4 = partner.mbti_4;
 			nowMatchingUser.kakao_id = partner.kakao_id;
+			partner.is_matched = false;
 			await User.delete({
 				id: user.id
 			});
-			nowMatchingUser.save();
+			await nowMatchingUser.save();
+			await partner.save();
 		}
 		else {
 			await User.delete({
