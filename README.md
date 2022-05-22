@@ -31,7 +31,7 @@ ___
 - 매칭이 되었다면, 상대 정보를 보여줍니다. 카카오톡 ID를 통해 연락을 주고받으시면 됩니다:)
 
 **기능3. 매칭 취소**
-- 이름을 이용하여 매칭 취소를 하면, 입력했던 데이터가 시스템에서 안전하게 삭제됩니다.
+- 이름을 이용하여 매칭 취소를 하면, 입력했던 데이터가 시스템에서 완전하게 삭제됩니다.
 
 IDEA와 함께 새로운 친구를 만들어봐요..! 😍
 ___
@@ -55,7 +55,7 @@ ___
 
 ## 3. 실행 방법 및 소스 코드 구조 (Execution & Code Structure)
 
-**local환경에서 백엔드 실행 (Executing server in local environment)**
+**local환경에서 서버 실행 (Executing server in local environment)**
 1. `git clone` 명령어를 통해 로컬 디렉토리로 소스 코드를 가져옵니다. (Copy the code to your local directory by using `git clone`)
 2. Docker를 설치합니다 (Install Docker)
 3. 원격 또는 내부 데이터베이스를 구축합니다. 
