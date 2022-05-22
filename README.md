@@ -5,10 +5,10 @@ Matchig service for student who eat alone in SKKU 👭
 
 ___
 **목차 (Contents)**
-1. [IDEA에 대하여 (About IDEA)](## 1.-IDEA에 대하여-(About-IDEA))
-2. [시스템 구조 및 알고리즘 소개 (System Structure & Algorithm)](## 2.-시스템-구조-및-알고리즘-(System-Structure-&-Algorithm))
-3. [실행 방법 및 소스 코드 구조 (Execution & Code Structure)](## 3.-실행-방법-및-소스-코드-구조-(Execution-&-Code Structure))
-4. [개발자 소개 (Developer Introduction)](## 4.-개발자-소개-(Developer-Introduction))
+1. IDEA에 대하여 (About IDEA)
+2. 시스템 구조 및 알고리즘 소개 (System Structure & Algorithm)
+3. 실행 방법 및 소스 코드 구조 (Execution & Code Structure)
+4. 개발자 소개 (Developer Introduction)
 ___
 
 ## 1. IDEA에 대하여 (About IDEA)
