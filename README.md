@@ -61,11 +61,11 @@ ___
 3. 원격 또는 내부 데이터베이스를 구축합니다. 
 4. clone한 디렉토리 내부에 envs 폴더를 생성한 후, backend.env와 matcher.env에 구축한 데이터베이스에 접근하는 url, port, username, password등을 다음과 같은 형식으로 기재합니다.
 ```
-PORT=(port number)
+PORT=(docker container port number)
 DB_USER_NAME=(database account user name)
 DB_PASSWORD=(password of database account)
 DB_URL=(address of database system)
-DB_PORT=(port number)
+DB_PORT=(DBMS port number)
 DB_DATABASE_NAME=(database schema name)
 NODE_ENV=dev
 ```
