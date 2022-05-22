@@ -80,21 +80,21 @@ ___
 최재열 
 - 성균관대학교 컴퓨터교육과 18학번
 - 시스템 설계, 백엔드 및 알고리즘 개발
-- [Github](github.com/jaeyeol816)  
+- [Github](https://github.com/jaeyeol816)  
 
 김연준  
 - 성균관대학교 컴퓨터교육과 18학번
 - 알고리즘 개발 및 시스템 디자인
-- [Github](github.com/qqweqwqweqwe)
+- [Github](https://github.com/qqweqwqweqwe)
 
 김택호  
 - 성균관대학교 컴퓨터교육과 18학번
 - 프론트엔드 I/O처리 및 통신 부분 담당
-- [Github](github.com/TaekHoKIM)
+- [Github](https://github.com/TaekHoKIM)
 
 한우석  
 - 성균관대학교 컴퓨터교육과 21학번
 - 프론트엔드 통신 및 구조 담당
-- [Github](github.com/asktopol)  
+- [Github](https://github.com/asktopol)  
 
 <img width="765" alt="Screen Shot 2022-05-23 at 2 40 21 AM" src="https://user-images.githubusercontent.com/80497842/169708303-28b4af6e-1744-4750-b828-4ae0902285ff.png">
