@@ -5,10 +5,10 @@ Matchig service for student who eat alone in SKKU 👭
 
 ___
 **목차 (Contents)**
-1. [IDEA에 대하여 (About IDEA)](https://github.com/jaeyeol816/No-Honbab/edit/master/README.md#1-idea%EC%97%90-%EB%8C%80%ED%95%98%EC%97%AC-about-idea)
-2. [시스템 구조 및 알고리즘 소개 (System Structure & Algorithm)](https://github.com/jaeyeol816/No-Honbab/edit/master/README.md#2-%EC%8B%9C%EC%8A%A4%ED%85%9C-%EA%B5%AC%EC%A1%B0-%EB%B0%8F-%EC%95%8C%EA%B3%A0%EB%A6%AC%EC%A6%98-system-structure--algorithm)
-3. [실행 방법 및 소스 코드 구조 (Execution & Code Structure)](https://github.com/jaeyeol816/No-Honbab/edit/master/README.md#3-%EC%8B%A4%ED%96%89-%EB%B0%A9%EB%B2%95-%EB%B0%8F-%EC%86%8C%EC%8A%A4-%EC%BD%94%EB%93%9C-%EA%B5%AC%EC%A1%B0-execution--code-structure)
-4. [개발자 소개 (Developer Introduction)](https://github.com/jaeyeol816/No-Honbab/edit/master/README.md#4-%EA%B0%9C%EB%B0%9C%EC%9E%90-%EC%86%8C%EA%B0%9C-developer-introduction)
+1. [IDEA에 대하여 (About IDEA)](## 1. IDEA에 대하여 (About IDEA))
+2. [시스템 구조 및 알고리즘 소개 (System Structure & Algorithm)](## 2. 시스템 구조 및 알고리즘 (System Structure & Algorithm))
+3. [실행 방법 및 소스 코드 구조 (Execution & Code Structure)](## 3. 실행 방법 및 소스 코드 구조 (Execution & Code Structure))
+4. [개발자 소개 (Developer Introduction)](## 4. 개발자 소개 (Developer Introduction))
 ___
 
 ## 1. IDEA에 대하여 (About IDEA)
